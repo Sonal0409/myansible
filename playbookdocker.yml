@@ -1,0 +1,28 @@
+---
+- hosts: webservers
+  become: true
+  become_user: root
+  tasks:
+  - name: install tomcat
+    yum: name=tomcat state=present
+  - name: start tomcat
+    service: name=tomcat state=started
+  - name: install docker
+    yum: name=docker state=present
+  - name: start docker
+    service: name=docker state=started
+  - name: install git
+    yum: name=git state=present
+  - name: clone a repo
+    git: repo=https://github.com/Sonal0409/AnsibleDockerdemo.git dest=/tmp/gitrepo
+  - name: build docker file
+    command: chdir=/tmp/gitrepo docker build -t myadd:ansible2 .
+  - name: login docker
+    command: docker login --username edu123 --password Edureka@123
+  - name: tag the image
+    command: docker tag myadd:ansible1 edu123/myadd:ansible2
+  - name: push
+    command: docker push edu123/myadd:ansible2
+  - name: create container
+    command: docker run -itd -P myadd:ansible2
+
