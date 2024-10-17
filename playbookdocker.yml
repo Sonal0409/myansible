@@ -3,10 +3,6 @@
   become: true
   become_user: root
   tasks:
-  - name: install tomcat
-    yum: name=tomcat state=present
-  - name: start tomcat
-    service: name=tomcat state=started
   - name: install docker
     yum: name=docker state=present
   - name: start docker
